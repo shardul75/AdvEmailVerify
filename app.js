@@ -1,25 +1,22 @@
-// Function to handle form submission
-document.getElementById('emailForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('email').value;
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = 'Verifying...'; // Display a loading message
+document.getElementById('email-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent form from reloading the page
 
-    // Call the backend to validate the email
+    const email = document.getElementById('email').value;
+
+    // Send the email to the server for validation
     fetch('/verify-email', {
-        method: 'POST',
+        method: 'POST',  // POST request to the server
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json',  // Send the data as JSON
         },
-        body: JSON.stringify({ email: email })
+        body: JSON.stringify({ email })  // Pass the email in the request body
     })
-    .then(response => response.json())
+    .then(response => response.json())  // Parse the JSON response from the server
     .then(data => {
-        // Show the verification result
-        resultDiv.innerHTML = `<p>${data.message}</p>`;
+        // Display the result in the <p id="result"></p>
+        document.getElementById('result').textContent = data.message;
     })
     .catch(error => {
-        resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        console.error('Error:', error);
     });
 });
